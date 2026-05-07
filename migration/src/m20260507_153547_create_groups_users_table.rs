@@ -1,24 +1,22 @@
 use sea_orm_migration::{prelude::*, schema::*};
 
-/// Join table for many-to-many relation between `users` and `groups`.
 #[derive(DeriveMigrationName)]
 pub struct Migration;
 
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
-    /// Create the join table
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        // 1. Create join table
         manager
             .create_table(
                 Table::create()
                     .table(GroupsUsers::Table)
                     .if_not_exists()
 
-                    // composite primary key is common for join tables
+                    // Foreign key
                     .col(big_integer(GroupsUsers::UserId).not_null())
                     .col(big_integer(GroupsUsers::GroupId).not_null())
 
+                    // Primary key
                     .primary_key(
                         Index::create()
                             .col(GroupsUsers::UserId)
@@ -29,7 +27,6 @@ impl MigrationTrait for Migration {
             )
             .await?;
 
-        // 2. FK: users → groups_users
         manager
             .create_foreign_key(
                 ForeignKey::create()
