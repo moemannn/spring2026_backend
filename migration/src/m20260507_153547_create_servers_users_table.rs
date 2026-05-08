@@ -9,18 +9,18 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(GroupsUsers::Table)
+                    .table(ServersUsers::Table)
                     .if_not_exists()
 
                     // Foreign key
-                    .col(big_integer(GroupsUsers::UserId).not_null())
-                    .col(big_integer(GroupsUsers::GroupId).not_null())
+                    .col(big_integer(ServersUsers::UserId).not_null())
+                    .col(big_integer(ServersUsers::GroupId).not_null())
 
                     // Primary key
                     .primary_key(
                         Index::create()
-                            .col(GroupsUsers::UserId)
-                            .col(GroupsUsers::GroupId),
+                            .col(ServersUsers::UserId)
+                            .col(ServersUsers::GroupId),
                     )
 
                     .to_owned(),
@@ -30,8 +30,8 @@ impl MigrationTrait for Migration {
         manager
             .create_foreign_key(
                 ForeignKey::create()
-                    .name("fk_groups_users_user_id")
-                    .from(GroupsUsers::Table, GroupsUsers::UserId)
+                    .name("fk_Servers_users_user_id")
+                    .from(ServersUsers::Table, ServersUsers::UserId)
                     .to(Users::Table, Users::Id)
                     .on_delete(ForeignKeyAction::Cascade)
                     .to_owned(),
@@ -41,9 +41,9 @@ impl MigrationTrait for Migration {
         manager
             .create_foreign_key(
                 ForeignKey::create()
-                    .name("fk_groups_users_group_id")
-                    .from(GroupsUsers::Table, GroupsUsers::GroupId)
-                    .to(Groups::Table, Groups::Id)
+                    .name("fk_Servers_users_group_id")
+                    .from(ServersUsers::Table, ServersUsers::GroupId)
+                    .to(Servers::Table, Servers::Id)
                     .on_delete(ForeignKeyAction::Cascade)
                     .to_owned(),
             )
@@ -56,7 +56,7 @@ impl MigrationTrait for Migration {
         manager
             .drop_table(
                 Table::drop()
-                    .table(GroupsUsers::Table)
+                    .table(ServersUsers::Table)
                     .to_owned(),
             )
             .await
@@ -64,7 +64,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum GroupsUsers {
+enum ServersUsers {
     Table,
     UserId,
     GroupId,
@@ -76,7 +76,7 @@ enum Users {
 }
 
 #[derive(DeriveIden)]
-enum Groups {
+enum Servers {
     Table,
     Id,
 }

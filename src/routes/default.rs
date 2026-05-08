@@ -16,10 +16,10 @@ pub fn get_default_routes(state: Arc<AppState>) -> Router {
                 .route("/users/:id", put(edit_user))
                 .route("/users/:id", delete(delete_user))
 
-                .route("/groups", get(get_groups).post(add_user))
-                .route("/groups/:id", get(get_user))
-                .route("/groups/:id", put(edit_user))
-                .route("/groups/:id", delete(delete_user))
+                .route("/server", get(get_servers).post(add_server))
+                .route("/server/:id", get(get_server))
+                .route("/server/:id", put(edit_server))
+                .route("/server/:id", delete(delete_server))
         )
         .with_state(state)
 }

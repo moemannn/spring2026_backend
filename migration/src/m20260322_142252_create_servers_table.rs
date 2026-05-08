@@ -9,20 +9,20 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(Groups::Table)
+                    .table(Servers::Table)
                     .if_not_exists()
 
                     // Primary key
-                    .col(pk_auto(Groups::Id))
+                    .col(pk_auto(Servers::Id))
 
                     // Core
-                    .col(string(Groups::Name).not_null())
-                    .col(text(Groups::Description).null())
+                    .col(string(Servers::Name).not_null())
+                    .col(text(Servers::Description).null())
 
                     // Timestamps
-                    .col(timestamp(Groups::CreatedAt).not_null())
-                    .col(timestamp_null(Groups::ChangedAt))
-                    .col(timestamp_null(Groups::DeletedAt))
+                    .col(timestamp(Servers::CreatedAt).not_null())
+                    .col(timestamp_null(Servers::ChangedAt))
+                    .col(timestamp_null(Servers::DeletedAt))
 
                     .to_owned(),
             )
@@ -33,7 +33,7 @@ impl MigrationTrait for Migration {
         manager
             .drop_table(
                 Table::drop()
-                    .table(Groups::Table)
+                    .table(Servers::Table)
                     .to_owned(),
             )
             .await
@@ -41,7 +41,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum Groups {
+enum Servers {
     Table,
     Id,
     Name,

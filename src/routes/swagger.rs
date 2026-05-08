@@ -11,11 +11,11 @@ use utoipa_swagger_ui::SwaggerUi;
         crate::handlers::users::edit_user,
         crate::handlers::users::delete_user,
 
-        crate::handlers::groups::get_groups,
-        crate::handlers::groups::get_group,
-        crate::handlers::groups::add_group,
-        crate::handlers::groups::edit_group,
-        crate::handlers::groups::delete_group,
+        crate::handlers::servers::get_servers,
+        crate::handlers::servers::get_server,
+        crate::handlers::servers::add_server,
+        crate::handlers::servers::edit_server,
+        crate::handlers::servers::delete_server,
     )
 )]
 pub struct ApiDoc;

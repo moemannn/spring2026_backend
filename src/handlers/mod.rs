@@ -1,8 +1,8 @@
 pub mod users;
-pub mod groups;
+pub mod servers;
 
 
-pub use groups::*;
+pub use servers::*;
 pub use users::{delete_user,
                 get_users,
                 get_user,
