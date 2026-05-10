@@ -16,6 +16,11 @@ use utoipa_swagger_ui::SwaggerUi;
         crate::handlers::servers::add_server,
         crate::handlers::servers::edit_server,
         crate::handlers::servers::delete_server,
+
+        crate::handlers::messages::get_messages,
+        crate::handlers::messages::post_message,
+        crate::handlers::messages::edit_message,
+        crate::handlers::messages::delete_message,
     )
 )]
 pub struct ApiDoc;

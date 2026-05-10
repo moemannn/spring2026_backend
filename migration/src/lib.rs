@@ -2,9 +2,9 @@ pub use sea_orm_migration::prelude::*;
 
 mod m20220101_000001_create_users_table;
 mod m20260322_142252_create_servers_table;
-mod m20260327_121148_create_messages_table;
-mod m20260507_153547_create_servers_users_table;
-
+mod m20260508_125128_create_channels_table;
+mod m20260508_172157_create_message_mapping_table;
+mod m20260508_173123_create_messages_table;
 pub struct Migrator;
 
 #[async_trait::async_trait]
@@ -13,8 +13,9 @@ impl MigratorTrait for Migrator {
         vec![
             Box::new(m20220101_000001_create_users_table::Migration),
             Box::new(m20260322_142252_create_servers_table::Migration),
-            Box::new(m20260327_121148_create_messages_table::Migration),
-            Box::new(m20260507_153547_create_servers_users_table::Migration),
+            Box::new(m20260508_125128_create_channels_table::Migration),
+            Box::new(m20260508_172157_create_message_mapping_table::Migration),
+            Box::new(m20260508_173123_create_messages_table::Migration),
         ]
     }
 }

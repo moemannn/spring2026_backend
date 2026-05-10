@@ -1,11 +1,14 @@
+use std::sync::Arc;
 use axum::{
-    extract::Path,
-    Json,
+    extract::{State, Json},
 };
+use axum::extract::Path;
+use axum::http::StatusCode;
 use utoipa::path;
 
-use crate::models::users::UserResponseMin;
-
+use crate::AppState;
+use crate::models::users::*;
+use crate::services::user::*;
 
 /// GET all users
 #[utoipa::path(
@@ -36,7 +39,6 @@ pub async fn get_user(Path(id): Path<i32>) -> Json<UserResponseMin> {
         id,
         first_name: "".into(),
         last_name: "".into(),
-        email: "".into(),
     })
 }
 
@@ -63,18 +65,19 @@ pub async fn delete_user(Path(id): Path<i32>) -> Json<()> {
     post,
     path = "/api/users",
     responses(
-        (status = 200, body = UserResponseMin)
+        (status = 200, body = CreateUserResponse)
     )
 )]
-pub async fn add_user() -> Json<UserResponseMin> {
-    Json(UserResponseMin {
-        id: 0,
-        first_name: "".into(),
-        last_name: "".into(),
-        email: "".into(),
-    })
-}
+pub async fn add_user(
+    State(state): State<Arc<AppState>>,
+    Json(payload): Json<CreateUserRequest>,
+) -> Result<Json<CreateUserResponse>, axum::http::StatusCode> {
+    let user = create_user(&state.db, payload)
+        .await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
+    Ok(Json(user))
+}
 
 /// UPDATE user
 #[utoipa::path(
@@ -92,6 +95,5 @@ pub async fn edit_user(Path(id): Path<i32>) -> Json<UserResponseMin> {
         id,
         first_name: "".into(),
         last_name: "".into(),
-        email: "".into(),
     })
 }

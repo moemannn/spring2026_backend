@@ -2,7 +2,8 @@
 
 pub mod prelude;
 
+pub mod channels;
 pub mod messages;
 pub mod servers;
-pub mod servers_users;
 pub mod users;
+pub mod message_mapping;

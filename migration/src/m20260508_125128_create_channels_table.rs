@@ -9,20 +9,19 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(Messages::Table)
+                    .table(Channels::Table)
                     .if_not_exists()
 
                     // Primary key
-                    .col(pk_auto(Messages::Id))
+                    .col(pk_auto(Channels::Id))
 
                     // Core
-                    .col(big_integer(Messages::SenderId).not_null())
-                    .col(text(Messages::Content).not_null())
+                    .col(string(Channels::Name).not_null())
 
                     // Timestamps
-                    .col(timestamp(Messages::CreatedAt).not_null())
-                    .col(timestamp_null(Messages::ChangedAt))
-                    .col(timestamp_null(Messages::DeletedAt))
+                    .col(timestamp(Channels::CreatedAt).not_null())
+                    .col(timestamp_null(Channels::ChangedAt))
+                    .col(timestamp_null(Channels::DeletedAt))
 
                     .to_owned(),
             )
@@ -31,17 +30,16 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(Messages::Table).to_owned())
+            .drop_table(Table::drop().table(Channels::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-enum Messages {
+enum Channels {
     Table,
     Id,
-    Content,
-    SenderId,
+    Name,
     CreatedAt,
     ChangedAt,
     DeletedAt,

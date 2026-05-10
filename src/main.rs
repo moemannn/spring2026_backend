@@ -1,23 +1,24 @@
 mod db;
 mod handlers;
 mod routes;
-mod entity;
+pub mod entity;
 mod models;
+mod services;
 
 use db::connect_db;
 use std::sync::Arc;
-use axum::{Router};
+use axum::Router;
 
 #[derive(Clone)]
 pub struct AppState {
-    pub db: Arc<sea_orm::DatabaseConnection>,
+    pub db: sea_orm::DatabaseConnection,
 }
 
 #[tokio::main]
 async fn main() {
     dotenvy::dotenv().ok();
 
-    let db = Arc::new(connect_db().await);
+    let db = connect_db().await;
 
     let state = Arc::new(AppState { db });
 

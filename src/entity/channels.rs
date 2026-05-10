@@ -3,15 +3,11 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "users")]
+#[sea_orm(table_name = "channels")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
-    pub first_name: String,
-    pub last_name: String,
-    pub email: String,
-    pub password: String,
-    pub admin: bool,
+    pub name: String,
     pub created_at: DateTime,
     pub changed_at: Option<DateTime>,
     pub deleted_at: Option<DateTime>,
