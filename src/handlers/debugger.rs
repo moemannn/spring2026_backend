@@ -7,7 +7,7 @@ use crate::AppState;
 pub async fn debug(
     State(state): State<Arc<AppState>>,
 ) -> Result<(), String> {
-
+    let now = chrono::Utc::now();
     let db = &state.db;
 
     // Insert mapping first
@@ -26,7 +26,7 @@ pub async fn debug(
     let new_message = messages::ActiveModel {
         message_mapping_id: Set(message_mapping.id),
         content: Set("hello".to_string()),
-        created_at: Set(chrono::Utc::now()),
+        created_at: Set(now),
         ..Default::default()
     };
 

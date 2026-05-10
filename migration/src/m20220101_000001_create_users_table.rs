@@ -25,11 +25,7 @@ impl MigrationTrait for Migration {
                     .col(boolean(Users::Admin).not_null().default(false))
 
                     // Timestamps
-                    .col(
-                        timestamp(Users::CreatedAt)
-                            .not_null()
-                            .default(Expr::current_timestamp()),
-                    )
+                    .col(timestamp(Users::CreatedAt).not_null())
                     .col(timestamp_null(Users::ChangedAt))
                     .col(timestamp_null(Users::DeletedAt))
 
