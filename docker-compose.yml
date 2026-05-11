@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: individual_project_spring_2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgress_individual_project_spring_2026:/var/lib/postgresql/data
+
+volumes:
+  postgress_individual_project_spring_2026:
