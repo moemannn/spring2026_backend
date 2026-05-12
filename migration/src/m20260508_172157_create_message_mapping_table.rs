@@ -12,20 +12,31 @@ impl MigrationTrait for Migration {
                     .table(MessageMapping::Table)
                     .if_not_exists()
 
-                    // PRIMARY KEY (FIXED -> BIGINT)
+                    // PRIMARY KEY
                     .col(
-                        big_integer(MessageMapping::Id)
+                        ColumnDef::new(MessageMapping::Id)
+                            .uuid()
                             .not_null()
-                            .auto_increment()
                             .primary_key()
                     )
 
                     // TYPE
-                    .col(string(MessageMapping::MessageType).not_null())
+                    .col(
+                        ColumnDef::new(
+                            MessageMapping::MessageType)
+                            .uuid()
+                            .not_null()
+                    )
 
-                    // RELATIONS
-                    .col(big_integer(MessageMapping::TargetId).null())
-                    .col(big_integer(MessageMapping::ScopeId).null())
+                    // RELATIONS KEYS
+                    .col(ColumnDef::new(MessageMapping::TargetId)
+                        .uuid()
+                        .not_null()
+                    )
+                    .col(big_integer(MessageMapping::ScopeId)
+                        .uuid()
+                        .not_null()
+                    )
 
                     .to_owned(),
             )

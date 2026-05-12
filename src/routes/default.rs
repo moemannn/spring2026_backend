@@ -3,28 +3,25 @@ use axum::{
     Router,
 };
 use std::sync::Arc;
-use axum::routing::delete;
-use crate::{handlers::*, AppState};
+use crate::{
+    handlers::debugger::debug,
+    AppState,
+    routes::{
+        user::users_routes,
+        admin::admin_routes,
+        message::message_routes,
+        server::server_routes,
+    }};
 
 pub fn get_default_routes(state: Arc<AppState>) -> Router {
     Router::new()
         .nest(
             "/api",
             Router::new()
-                .route("/users", post(add_user).get(get_users))
-                .route("/users/:id", get(get_user))
-                .route("/users/:id", put(edit_user))
-                .route("/users/:id", delete(delete_user))
-
-                .route("/server", post(add_server).get(get_servers))
-                .route("/server/:id", get(get_server))
-                .route("/server/:id", put(edit_server))
-                .route("/server/:id", delete(delete_server))
-
-                .route("/message/:id/:message_type", post(post_message).get(get_messages))
-                .route("/message/:id/:message_type", put(edit_message))
-                .route("/message/:id/:message_type", delete(delete_message))
-
+                .nest("/users", users_routes())
+                .nest("/admin", admin_routes())
+                .nest("/servers", server_routes())
+                .nest("/messages", message_routes())
                 .route("/debug", get(debug))
         )
         .with_state(state)

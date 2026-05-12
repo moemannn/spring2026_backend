@@ -1,6 +1,7 @@
 pub mod default;
 pub mod swagger;
+mod user;
+mod admin;
+mod message;
 
-
-use default::get_default_routes;
-use swagger::get_swagger_routes;
+mod server;

@@ -6,44 +6,42 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+
         manager
             .create_table(
                 Table::create()
-                    .table(Messages::Table)
+                    .table(RefreshTokens::Table)
                     .if_not_exists()
 
-                    // PRIMARY KEY
+                    // Primary key
                     .col(
-                        ColumnDef::new(Messages::Id)
+                        ColumnDef::new(RefreshTokens::Id)
                             .uuid()
                             .not_null()
                             .primary_key()
                     )
 
-                    // CORE
-                    .col(text(Messages::Content).not_null())
-
                     // FOREIGN/RELATIONS KEYS
                     .col(
-                        ColumnDef::new(Messages::MessageMappingId)
+                        ColumnDef::new(RefreshTokens::UserId)
                             .uuid()
                             .not_null()
+                            .unique_key(),
                     )
                     .foreign_key(
                         ForeignKey::create()
-                            .name("fk_messages_mapping")
-                            .from(Messages::Table, Messages::MessageMappingId)
-                            .to(MessageMapping::Table, MessageMapping::Id)
-                            .on_delete(ForeignKeyAction::Cascade)
+                            .name("fk_user_uuid")
+                            .from(RefreshTokens::Table, RefreshTokens::UserId)
+                            .to(Users::Table, Users::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
                     )
 
-                    // TIMESTAMPS
-                    .col(timestamp(Messages::CreatedAt)
+                    // Timestamps
+                    .col(timestamp(RefreshTokens::ExpiresAt).not_null())
+                    .col(timestamp_null(RefreshTokens::CreatedAt)
                         .not_null()
                         .default(Expr::cust("CURRENT_TIMESTAMP"))
                     )
-                    .col(timestamp_null(Messages::ChangedAt))
-                    .col(timestamp_null(Messages::DeletedAt))
 
                     .to_owned(),
             )
@@ -52,24 +50,24 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(Messages::Table).to_owned())
+            .drop_table(Table::drop().table(RefreshTokens::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-enum Messages {
+enum RefreshTokens {
     Table,
     Id,
-    MessageMappingId,
-    Content,
+    UserId,
+    TokeHash,
+    ExpiresAt,
     CreatedAt,
-    ChangedAt,
-    DeletedAt,
 }
 
 #[derive(DeriveIden)]
-enum MessageMapping {
+enum Users {
     Table,
     Id,
 }
+

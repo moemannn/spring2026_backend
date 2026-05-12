@@ -12,9 +12,12 @@ pub struct Model {
     pub email: String,
     pub password: String,
     pub admin: bool,
-    pub created_at: DateTime,
-    pub changed_at: Option<DateTime>,
-    pub deleted_at: Option<DateTime>,
+    #[sea_orm(column_type = "TimestampWithTimeZone")]
+    pub created_at: chrono::DateTime<chrono::Utc>,
+    #[sea_orm(column_type = "TimestampWithTimeZone")]
+    pub changed_at: Option<chrono::DateTime<chrono::Utc>>,
+    #[sea_orm(column_type = "TimestampWithTimeZone")]
+    pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

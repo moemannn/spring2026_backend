@@ -12,16 +12,25 @@ impl MigrationTrait for Migration {
                     .table(Servers::Table)
                     .if_not_exists()
 
-                    // Primary key
-                    .col(pk_auto(Servers::Id))
-
-                    // Core
+                    // PRIMARY KEY
+                    .col(
+                        ColumnDef::new(Servers::Id)
+                            .uuid()
+                            .not_null()
+                            .primary_key()
+                    )
+                    // CORE
                     .col(string(Servers::Name).not_null())
-                    .col(text(Servers::Description).null())
+                    .col(text(Servers::Description).not_null())
 
-                    // Timestamps
-                    .col(timestamp(Servers::CreatedAt).not_null())
-                    .col(timestamp_null(Servers::ChangedAt))
+                    // FOREIGN/RELATION KEY
+                    // TODO: Add owner Uuid.
+
+                    // TIMESTAMPS
+                    .col(timestamp(Servers::CreatedAt)
+                        .not_null()
+                        .default(Expr::cust("CURRENT_TIMESTAMP"))
+                    )                    .col(timestamp_null(Servers::ChangedAt))
                     .col(timestamp_null(Servers::DeletedAt))
 
                     .to_owned(),

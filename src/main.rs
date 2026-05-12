@@ -1,9 +1,10 @@
 mod db;
 mod handlers;
 mod routes;
-pub mod entity;
+mod entity;
 mod models;
 mod services;
+mod error;
 
 use db::connect_db;
 use std::sync::Arc;

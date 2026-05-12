@@ -12,15 +12,21 @@ impl MigrationTrait for Migration {
                     .table(Channels::Table)
                     .if_not_exists()
 
-                    // Primary key
-                    .col(pk_auto(Channels::Id))
-
-                    // Core
+                    // PRIMARY KEY
+                    .col(
+                        ColumnDef::new(Channels::Id)
+                            .uuid()
+                            .not_null()
+                            .primary_key()
+                    )
+                    // CORE
                     .col(string(Channels::Name).not_null())
 
-                    // Timestamps
-                    .col(timestamp(Channels::CreatedAt).not_null())
-                    .col(timestamp_null(Channels::ChangedAt))
+                    // TIMESTAMPS
+                    .col(timestamp(Channels::CreatedAt)
+                        .not_null()
+                        .default(Expr::cust("CURRENT_TIMESTAMP"))
+                    )                    .col(timestamp_null(Channels::ChangedAt))
                     .col(timestamp_null(Channels::DeletedAt))
 
                     .to_owned(),

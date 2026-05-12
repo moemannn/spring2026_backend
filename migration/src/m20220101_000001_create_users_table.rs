@@ -12,20 +12,27 @@ impl MigrationTrait for Migration {
                     .table(Users::Table)
                     .if_not_exists()
 
-                    // Primary key
-                    .col(pk_auto(Users::Id))
-
-                    // Core
+                    // PRIMARY KEY
+                    .col(
+                        ColumnDef::new(Users::Id)
+                            .uuid()
+                            .not_null()
+                            .primary_key()
+                    )
+                    // CORE
                     .col(string(Users::FirstName).not_null())
                     .col(string(Users::LastName).not_null())
                     .col(string(Users::Email).not_null())
                     .col(string(Users::Password).not_null())
 
-                    // Flag
+                    // FLAG
                     .col(boolean(Users::Admin).not_null().default(false))
 
-                    // Timestamps
-                    .col(timestamp(Users::CreatedAt).not_null())
+                    // TIMESTAMPS
+                    .col(timestamp(Users::CreatedAt)
+                        .not_null()
+                        .default(Expr::cust("CURRENT_TIMESTAMP"))
+                    )
                     .col(timestamp_null(Users::ChangedAt))
                     .col(timestamp_null(Users::DeletedAt))
 

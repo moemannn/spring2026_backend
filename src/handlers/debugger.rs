@@ -3,6 +3,7 @@ use axum::extract::State;
 use crate::entity::{messages, message_mapping};
 use sea_orm::{Set, ActiveModelTrait};
 use crate::AppState;
+use crate::models::UserResponse;
 
 pub async fn debug(
     State(state): State<Arc<AppState>>,
@@ -10,7 +11,6 @@ pub async fn debug(
     let now = chrono::Utc::now();
     let db = &state.db;
 
-    // Insert mapping first
     let mapping = message_mapping::ActiveModel {
         target_id: Set(Some(123)),
         scope_id: Set(Some(456)),

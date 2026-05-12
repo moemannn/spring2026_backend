@@ -9,14 +9,17 @@ pub struct UserResponseMin {
 }
 
 #[derive(Serialize, ToSchema)]
-pub struct CreateUserResponse {
+pub struct UserResponse {
     pub id: i32,
     pub first_name: String,
     pub last_name: String,
     pub email: String,
+    pub password: String,
 }
+
 #[derive(Deserialize, ToSchema)]
-pub struct CreateUserRequest {
+pub struct UserRequest {
+    pub id: i32,
     pub first_name: String,
     pub last_name: String,
     pub email: String,
