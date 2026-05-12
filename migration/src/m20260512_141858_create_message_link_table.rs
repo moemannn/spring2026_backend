@@ -13,35 +13,25 @@ impl MigrationTrait for Migration {
                     .if_not_exists()
 
                     // PRIMARY KEY
-                    .col(
-                        ColumnDef::new(MessageLink::Id)
-                            .uuid()
-                            .not_null()
-                            .primary_key()
+                    .primary_key(
+                        Index::create()
+                            .col(MessageLink::MessageParentId)
+                            .col(MessageLink::MessageChildId),
                     )
 
-                    // RELATION KEY
+                    // CORE
                     .col(
                         ColumnDef::new(MessageLink::MessageParentId)
                             .uuid()
-                            .not_null()
+                            .not_null(),
                     )
                     .col(
                         ColumnDef::new(MessageLink::MessageChildId)
                             .uuid()
-                            .not_null()
+                            .not_null(),
                     )
 
-                    // PREVENTIVE DUP.
-                    .index(
-                        Index::create()
-                            .name("idx_message_link_unique")
-                            .col(MessageLink::MessageParentId)
-                            .col(MessageLink::MessageChildId)
-                            .unique(),
-                    )
-
-                    // FOREIGN KEY
+                    // FOREIGN KEYS
                     .foreign_key(
                         ForeignKey::create()
                             .name("fk_parent_message")
@@ -72,13 +62,12 @@ impl MigrationTrait for Migration {
 #[derive(DeriveIden)]
 enum MessageLink {
     Table,
-    Id,
     MessageChildId,
     MessageParentId,
 }
+
 #[derive(DeriveIden)]
 enum Messages {
     Table,
     Id,
-
 }

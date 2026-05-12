@@ -5,16 +5,17 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
 #[sea_orm(table_name = "users_to_servers")]
 pub struct Model {
-    pub id: Uuid,
-    pub server_id: Uuid,
+    #[sea_orm(primary_key, auto_increment = false)]
     pub user_id: Uuid,
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub server_id: Uuid,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
         belongs_to = "super::servers::Entity",
-        from = "Column::UserId",
+        from = "Column::ServerId",
         to = "super::servers::Column::Id",
         on_update = "NoAction",
         on_delete = "Cascade"

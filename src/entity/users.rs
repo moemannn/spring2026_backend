@@ -38,4 +38,13 @@ impl Related<super::users_to_servers::Entity> for Entity {
     }
 }
 
+impl Related<super::servers::Entity> for Entity {
+    fn to() -> RelationDef {
+        super::users_to_servers::Relation::Servers.def()
+    }
+    fn via() -> Option<RelationDef> {
+        Some(super::users_to_servers::Relation::Users.def().rev())
+    }
+}
+
 impl ActiveModelBehavior for ActiveModel {}

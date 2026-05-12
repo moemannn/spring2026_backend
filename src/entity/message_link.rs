@@ -6,8 +6,8 @@ use sea_orm::entity::prelude::*;
 #[sea_orm(table_name = "message_link")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
-    pub id: Uuid,
     pub message_parent_id: Uuid,
+    #[sea_orm(primary_key, auto_increment = false)]
     pub message_child_id: Uuid,
 }
 

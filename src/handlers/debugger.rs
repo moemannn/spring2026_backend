@@ -3,6 +3,7 @@ use axum::extract::State;
 use crate::entity::{messages, message_mapping};
 use sea_orm::{Set, ActiveModelTrait};
 use crate::AppState;
+use uuid::Uuid;
 use crate::models::UserResponse;
 
 pub async fn debug(
@@ -12,8 +13,8 @@ pub async fn debug(
     let db = &state.db;
 
     let mapping = message_mapping::ActiveModel {
-        target_id: Set(Some(123)),
-        scope_id: Set(Some(456)),
+        target_id: Set(Uuid::new_v4()),
+        scope_id: Set(Some(Uuid::new_v4())),
         message_type: Set(message_mapping::Type::Channel),
         ..Default::default()
     };
@@ -26,7 +27,6 @@ pub async fn debug(
     let new_message = messages::ActiveModel {
         message_mapping_id: Set(message_mapping.id),
         content: Set("hello".to_string()),
-        created_at: Set(now),
         ..Default::default()
     };
 

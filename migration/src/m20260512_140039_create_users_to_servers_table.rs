@@ -13,20 +13,25 @@ impl MigrationTrait for Migration {
                     .if_not_exists()
 
                     // PRIMARY KEY
-                    .col(ColumnDef::new(UsersToServers::Id)
-                        .not_null()
-                        .uuid()
+                    .primary_key(
+                        Index::create()
+                            .col(UsersToServers::UserId)
+                            .col(UsersToServers::ServerId),
                     )
 
-                    // FOREIGN/RELEATION KEYS
-                    .col(ColumnDef::new(UsersToServers::ServerId)
-                        .not_null()
-                        .uuid()
+                    // CORE
+                    .col(
+                        ColumnDef::new(UsersToServers::UserId)
+                            .uuid()
+                            .not_null(),
                     )
-                    .col(ColumnDef::new(UsersToServers::UserId)
-                        .not_null()
-                        .uuid()
+                    .col(
+                        ColumnDef::new(UsersToServers::ServerId)
+                            .uuid()
+                            .not_null(),
                     )
+
+                    // FOREIGN KEYS
                     .foreign_key(
                         ForeignKey::create()
                             .name("fk_user_uuid")
@@ -37,10 +42,11 @@ impl MigrationTrait for Migration {
                     .foreign_key(
                         ForeignKey::create()
                             .name("fk_server_uuid")
-                            .from(UsersToServers::Table, UsersToServers::UserId)
+                            .from(UsersToServers::Table, UsersToServers::ServerId)
                             .to(Servers::Table, Servers::Id)
                             .on_delete(ForeignKeyAction::Cascade),
                     )
+
                     .to_owned(),
             )
             .await
@@ -56,7 +62,6 @@ impl MigrationTrait for Migration {
 #[derive(DeriveIden)]
 enum UsersToServers {
     Table,
-    Id,
     UserId,
     ServerId,
 }
