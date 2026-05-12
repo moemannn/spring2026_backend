@@ -4,7 +4,6 @@ use axum::{
 };
 use std::sync::Arc;
 use crate::{
-    handlers::debugger::debug,
     AppState,
     routes::{
         user::users_routes,
