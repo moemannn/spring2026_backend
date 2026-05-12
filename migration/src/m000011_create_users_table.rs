@@ -27,8 +27,11 @@ impl MigrationTrait for Migration {
                         .not_null()
                         .unique_key()
                     )
-                    .col(string(Users::Password).not_null())
-
+                    .col(
+                        ColumnDef::new(Users::Password)
+                            .string()
+                            .not_null()
+                    )
                     // FLAG
                     .col(boolean(Users::Admin).not_null().default(false))
 
