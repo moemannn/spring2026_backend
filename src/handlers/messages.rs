@@ -1,58 +1,24 @@
+use std::sync::Arc;
 use axum::{
     extract::Path,
     Json,
 };
+use axum::extract::State;
 use uuid::Uuid;
+use crate::AppState;
 use crate::models::messages::MessageResponseMin;
 
 
-/// GET all messages
-#[utoipa::path(
-    get,
-    path = "/api/message/{id}/{message_type}",
-    params(
-        ("id" = Uuid, Path),
-        ("message_type" = i32, Path)
-    ),
-    responses(
-        (status = 200, body = [MessageResponseMin])
-    )
-)]
 pub async fn get_messages() -> Json<Vec<MessageResponseMin>> {
     Json(vec![])
 }
 
-
-/// DELETE message
-#[utoipa::path(
-    delete,
-    path = "/api/message/{id}/{message_type}",
-    params(
-        ("id" = Uuid, Path),
-        ("message_type" = i32, Path)
-    ),
-    responses(
-        (status = 200, body = [MessageResponseMin])
-    )
-)]
-pub async fn delete_message(Path(id): Path<Uuid>) -> Json<()> {
-    let _ = id;
+pub async fn get_view_messages_by_page(
+    State(state): State<Arc<AppState>>,
+    Path((id, page, page_size)): Path<(Uuid, u64, u64)>
+) -> Json<()> {
     Json(())
 }
-
-
-/// Send message
-#[utoipa::path(
-    post,
-    path = "/api/message/{id}/{message_type}",
-    params(
-        ("id" = Uuid, Path),
-        ("message_type" = i32, Path)
-    ),
-    responses(
-        (status = 200, body = [MessageResponseMin])
-    )
-)]
 pub async fn post_message() -> Json<MessageResponseMin> {
     Json(MessageResponseMin {
         id: Uuid::new_v4(),
@@ -61,20 +27,6 @@ pub async fn post_message() -> Json<MessageResponseMin> {
         created_at: "".into(),
     })
 }
-
-
-/// UPDATE message
-#[utoipa::path(
-    put,
-    path = "/api/message/{id}/{message_type}",
-    params(
-        ("id" = Uuid, Path),
-        ("message_type" = i32, Path)
-    ),
-    responses(
-        (status = 200, body = [MessageResponseMin])
-    )
-)]
 pub async fn edit_message(Path(id): Path<Uuid>) -> Json<MessageResponseMin> {
     Json(MessageResponseMin {
         id,

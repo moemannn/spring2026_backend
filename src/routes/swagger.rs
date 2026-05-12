@@ -17,10 +17,10 @@ use utoipa_swagger_ui::SwaggerUi;
         // crate::handlers::servers::update_server,
         // crate::handlers::servers::delete_server,
 
-        crate::handlers::messages::get_messages,
-        crate::handlers::messages::post_message,
+        // crate::handlers::messages::get_messages,
+        // crate::handlers::messages::post_message,
         // crate::handlers::messages::update_message,
-        crate::handlers::messages::delete_message,
+        // crate::handlers::messages::delete_message,
     )
 )]
 pub struct ApiDoc;
