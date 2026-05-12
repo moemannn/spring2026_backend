@@ -4,7 +4,7 @@ use axum::{
     extract::{State, Json, Path},
     http::StatusCode,
 };
-
+use uuid::Uuid;
 use crate::{
     AppState,
     error::AppError,
@@ -37,7 +37,7 @@ pub async fn get_users_by_page(
     get,
     path = "/api/users/{id}",
     params(
-        ("id" = i32, Path)
+        ("id" = Uuid, Path)
     ),
     responses(
         (status = 200, body = UserResponse)
@@ -45,7 +45,7 @@ pub async fn get_users_by_page(
 )]
 pub async fn get_user_by_id(
     State(state): State<Arc<AppState>>,
-    Path(id): Path<i32>,
+    Path(id): Path<Uuid>,
 ) -> Result<Json<UserResponse>, AppError> {
     let user = user::get_user(&state.db, id).await?;
     Ok(Json(user))
@@ -73,7 +73,7 @@ pub async fn create_user(
     put,
     path = "/api/users/{id}",
     params(
-        ("id" = i32, Path)
+        ("id" = Uuid, Path)
     ),
     request_body = UserRequest,
     responses(
@@ -82,7 +82,7 @@ pub async fn create_user(
 )]
 pub async fn update_user_by_id(
     State(state): State<Arc<AppState>>,
-    Path(id): Path<i32>,
+    Path(id): Path<Uuid>,
     Json(payload): Json<UserRequest>,
 ) -> Result<Json<UserResponse>, AppError> {
     let user = user::update_user(&state.db, payload).await?;
@@ -94,7 +94,7 @@ pub async fn update_user_by_id(
     delete,
     path = "/api/users/{id}",
     params(
-        ("id" = i32, Path)
+        ("id" = Uuid, Path)
     ),
     responses(
         (status = 204)
@@ -102,7 +102,7 @@ pub async fn update_user_by_id(
 )]
 pub async fn delete_user_by_id(
     State(state): State<Arc<AppState>>,
-    Path(id): Path<i32>,
+    Path(id): Path<Uuid>,
 ) -> Result<StatusCode, AppError> {
     user::delete_user(&state.db, id).await?;
     Ok(StatusCode::NO_CONTENT)

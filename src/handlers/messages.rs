@@ -4,7 +4,7 @@ use axum::{
 };
 use chrono::Utc;
 use utoipa::path;
-
+use uuid::Uuid;
 use crate::models::messages::MessageResponseMin;
 
 
@@ -13,7 +13,7 @@ use crate::models::messages::MessageResponseMin;
     get,
     path = "/api/message/{id}/{message_type}",
     params(
-        ("id" = i32, Path),
+        ("id" = Uuid, Path),
         ("message_type" = i32, Path)
     ),
     responses(
@@ -30,14 +30,14 @@ pub async fn get_messages() -> Json<Vec<MessageResponseMin>> {
     delete,
     path = "/api/message/{id}/{message_type}",
     params(
-        ("id" = i32, Path),
+        ("id" = Uuid, Path),
         ("message_type" = i32, Path)
     ),
     responses(
         (status = 200, body = [MessageResponseMin])
     )
 )]
-pub async fn delete_message(Path(id): Path<i32>) -> Json<()> {
+pub async fn delete_message(Path(id): Path<Uuid>) -> Json<()> {
     let _ = id;
     Json(())
 }
@@ -48,7 +48,7 @@ pub async fn delete_message(Path(id): Path<i32>) -> Json<()> {
     post,
     path = "/api/message/{id}/{message_type}",
     params(
-        ("id" = i32, Path),
+        ("id" = Uuid, Path),
         ("message_type" = i32, Path)
     ),
     responses(
@@ -57,7 +57,7 @@ pub async fn delete_message(Path(id): Path<i32>) -> Json<()> {
 )]
 pub async fn post_message() -> Json<MessageResponseMin> {
     Json(MessageResponseMin {
-        id: 0,
+        id: Uuid::new_v4(),
         message_type: "".into(),
         content: "".into(),
         created_at: "".into(),
@@ -70,14 +70,14 @@ pub async fn post_message() -> Json<MessageResponseMin> {
     put,
     path = "/api/message/{id}/{message_type}",
     params(
-        ("id" = i32, Path),
+        ("id" = Uuid, Path),
         ("message_type" = i32, Path)
     ),
     responses(
         (status = 200, body = [MessageResponseMin])
     )
 )]
-pub async fn edit_message(Path(id): Path<i32>) -> Json<MessageResponseMin> {
+pub async fn edit_message(Path(id): Path<Uuid>) -> Json<MessageResponseMin> {
     Json(MessageResponseMin {
         id,
         message_type: "".into(),

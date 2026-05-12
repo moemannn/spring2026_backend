@@ -2,6 +2,7 @@ use sea_orm::{ColumnTrait, PaginatorTrait, QueryOrder, UpdateResult};
 use chrono::Utc;
 use sea_orm::{DatabaseConnection, Set, ActiveModelTrait, DbErr, EntityTrait, QueryFilter};
 use sea_orm::prelude::Expr;
+use uuid::Uuid;
 use crate::entity::users;
 use crate::models::{UserRequest, UserResponse, UserResponseMin};
 use crate::error::AppError;
@@ -29,7 +30,6 @@ pub async fn create_user(
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
-        password: user.password,
     })
 }
 
@@ -38,17 +38,16 @@ pub async fn update_user(
     payload: UserRequest,
 ) -> Result<UserResponse, AppError> {
     Ok(UserResponse {
-        id: 1,
+        id: Uuid::new_v4(),
         first_name: "".to_string(),
         last_name: "".to_string(),
         email: "".to_string(),
-        password: "".to_string(),
     })
 }
 
 pub async fn delete_user(
     db: &DatabaseConnection,
-    user_id: i32,
+    user_id: Uuid,
 ) -> Result<(), AppError> {
     let result = User::update_many()
         .col_expr(Column::DeletedAt, Expr::value(Some(Utc::now().naive_utc())))
@@ -63,7 +62,7 @@ pub async fn delete_user(
 
 pub async fn get_user(
     db: &DatabaseConnection,
-    user_id: i32,
+    user_id: Uuid,
 ) -> Result<UserResponse, AppError> {
     let user = users::Entity::find()
         .filter(users::Column::Id.eq(user_id))
@@ -76,7 +75,6 @@ pub async fn get_user(
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
-        password: user.password,
     })
 }
 
@@ -98,7 +96,6 @@ pub async fn get_users_by_page(
             first_name: u.first_name,
             last_name: u.last_name,
             email: u.email,
-            password: u.password,
         })
         .collect();
 
