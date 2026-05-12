@@ -14,6 +14,8 @@ use std::sync::Arc;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use state::AppState;
 
+
+
 #[tokio::main]
 async fn main() {
     dotenvy::dotenv().ok();
@@ -24,6 +26,11 @@ async fn main() {
         .init();
 
     let db = connect_db().await;
+
+    #[cfg(feature = "seed")]
+    {
+        seed_users(&db).await.unwrap();
+    }
 
     let state = Arc::new(AppState { db });
 
