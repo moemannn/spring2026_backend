@@ -3,7 +3,7 @@
 pub mod prelude ;
 
 pub mod channels ;
-pub mod message_link ;
+pub mod message_linking ;
 pub mod message_mapping ;
 pub mod messages ;
 pub mod refresh_tokens ;

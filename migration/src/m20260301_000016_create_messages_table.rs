@@ -37,6 +37,19 @@ impl MigrationTrait for Migration {
                             .on_delete(ForeignKeyAction::Cascade)
                     )
 
+                    .col(
+                        ColumnDef::new(Messages::MessageLinkingId)
+                            .uuid()
+                            .not_null()
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk_messages_linking")
+                            .from(Messages::Table, Messages::MessageLinkingId)
+                            .to(MessageLinking::Table, MessageLinking::Id)
+                            .on_delete(ForeignKeyAction::Cascade)
+                    )
+
                     // TIMESTAMPS
                     .col(timestamp(Messages::CreatedAt)
                         .not_null()
@@ -62,6 +75,7 @@ enum Messages {
     Table,
     Id,
     MessageMappingId,
+    MessageLinkingId,
     Content,
     CreatedAt,
     ChangedAt,
@@ -70,6 +84,12 @@ enum Messages {
 
 #[derive(DeriveIden)]
 enum MessageMapping {
+    Table,
+    Id,
+}
+
+#[derive(DeriveIden)]
+enum MessageLinking{
     Table,
     Id,
 }
