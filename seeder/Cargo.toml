@@ -6,12 +6,13 @@ publish = false
 
 [lib]
 name = "migration"
-path = "src/lib.rs"
+path = "../src/lib.rs"
 
 [dependencies]
 spring2026 = { path = ".." }
 
 tokio = { version = "1", features = ["full"] }
-sea-orm = "1"
+sea-orm = "=2.0.0-rc.38"
 uuid = { version = "1", features = ["v4"] }
 fake = "5.1.0"
+dotenvy = "0.15"

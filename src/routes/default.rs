@@ -22,7 +22,6 @@ pub fn get_default_routes(state: Arc<AppState>) -> Router {
                 .nest("/admin", admin_routes())
                 .nest("/servers", server_routes())
                 .nest("/messages", message_routes())
-                .route("/debug", get(debug))
         )
         .with_state(state)
 }
