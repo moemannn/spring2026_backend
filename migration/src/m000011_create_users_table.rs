@@ -1,4 +1,5 @@
 use sea_orm_migration::{prelude::*, schema::*};
+use uuid::Uuid;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;

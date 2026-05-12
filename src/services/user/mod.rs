@@ -7,6 +7,7 @@ use crate::entity::users;
 use crate::models::{UserRequest, UserResponse};
 use crate::error::AppError;
 use crate::services::helpers::ensure_affected;
+use bcrypt::hash;
 
 use crate::entity::users::{Entity as User, Column};
 
@@ -16,10 +17,11 @@ pub async fn create_user(
 ) -> Result<UserResponse, AppError> {
 
     let new_user = users::ActiveModel {
+        id: Set(Uuid::new_v4()),
         first_name: Set(payload.first_name),
         last_name: Set(payload.last_name),
         email: Set(payload.email),
-        password: Set(payload.password),
+        password: Set(hash(payload.password, 12)?),
         ..Default::default()
     };
 
