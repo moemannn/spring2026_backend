@@ -22,7 +22,10 @@ impl MigrationTrait for Migration {
                     // CORE
                     .col(string(Users::FirstName).not_null())
                     .col(string(Users::LastName).not_null())
-                    .col(string(Users::Email).not_null())
+                    .col(string(Users::Email)
+                        .not_null()
+                        .unique_key()
+                    )
                     .col(string(Users::Password).not_null())
 
                     // FLAG

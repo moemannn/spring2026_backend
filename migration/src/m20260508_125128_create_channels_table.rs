@@ -22,6 +22,18 @@ impl MigrationTrait for Migration {
                     // CORE
                     .col(string(Channels::Name).not_null())
 
+                    // FOREIGN/REATION KEYS
+                    .col(ColumnDef::new(Channels::ServerId)
+                        .uuid()
+                        .not_null())
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk_channels_server")
+                            .from(Channels::Table, Channels::ServerId)
+                            .to(Servers::Table, Servers::Id)
+                            .on_delete(ForeignKeyAction::Cascade)
+                    )
+
                     // TIMESTAMPS
                     .col(timestamp(Channels::CreatedAt)
                         .not_null()
@@ -46,7 +58,13 @@ enum Channels {
     Table,
     Id,
     Name,
+    ServerId,
     CreatedAt,
     ChangedAt,
     DeletedAt,
+}
+#[derive(DeriveIden)]
+enum Servers {
+    Table,
+    Id,
 }
