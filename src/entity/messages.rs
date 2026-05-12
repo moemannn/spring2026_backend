@@ -11,6 +11,7 @@ pub struct Model {
     pub content: String,
     pub message_mapping_id: Uuid,
     pub message_linking_id: Uuid,
+    pub message_owner_id: Uuid,
     pub created_at: DateTime,
     pub changed_at: Option<DateTime>,
     pub deleted_at: Option<DateTime>,
@@ -34,6 +35,14 @@ pub enum Relation {
         on_delete = "Cascade"
     )]
     MessageMapping,
+    #[sea_orm(
+        belongs_to = "super::users::Entity",
+        from = "Column::MessageOwnerId",
+        to = "super::users::Column::Id",
+        on_update = "NoAction",
+        on_delete = "Cascade"
+    )]
+    Users,
 }
 
 impl Related<super::message_linking::Entity> for Entity {
@@ -45,6 +54,12 @@ impl Related<super::message_linking::Entity> for Entity {
 impl Related<super::message_mapping::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::MessageMapping.def()
+    }
+}
+
+impl Related<super::users::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Users.def()
     }
 }
 
