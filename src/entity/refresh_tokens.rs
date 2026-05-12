@@ -3,33 +3,31 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "messages")]
+#[sea_orm(table_name = "refresh_tokens")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: Uuid,
-    #[sea_orm(column_type = "Text")]
-    pub content: String,
-    pub message_mapping_id: Uuid,
+    #[sea_orm(unique)]
+    pub user_id: Uuid,
+    pub expires_at: DateTime,
     pub created_at: DateTime,
-    pub changed_at: Option<DateTime>,
-    pub deleted_at: Option<DateTime>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::message_mapping::Entity",
-        from = "Column::MessageMappingId",
-        to = "super::message_mapping::Column::Id",
+        belongs_to = "super::users::Entity",
+        from = "Column::UserId",
+        to = "super::users::Column::Id",
         on_update = "NoAction",
         on_delete = "Cascade"
     )]
-    MessageMapping,
+    Users,
 }
 
-impl Related<super::message_mapping::Entity> for Entity {
+impl Related<super::users::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::MessageMapping.def()
+        Relation::Users.def()
     }
 }
 

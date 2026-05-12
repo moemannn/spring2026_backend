@@ -5,20 +5,34 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
 #[sea_orm(table_name = "servers")]
 pub struct Model {
-    #[sea_orm(primary_key)]
-    pub id: i32,
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub id: Uuid,
     pub name: String,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub description: String,
-    #[sea_orm(column_type = "TimestampWithTimeZone")]
-    pub created_at: chrono::DateTime<chrono::Utc>,
-    #[sea_orm(column_type = "TimestampWithTimeZone")]
-    pub changed_at: Option<chrono::DateTime<chrono::Utc>>,
-    #[sea_orm(column_type = "TimestampWithTimeZone")]
-    pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: DateTime,
+    pub changed_at: Option<DateTime>,
+    pub deleted_at: Option<DateTime>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(has_many = "super::channels::Entity")]
+    Channels,
+    #[sea_orm(has_many = "super::users_to_servers::Entity")]
+    UsersToServers,
+}
+
+impl Related<super::channels::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Channels.def()
+    }
+}
+
+impl Related<super::users_to_servers::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::UsersToServers.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}
