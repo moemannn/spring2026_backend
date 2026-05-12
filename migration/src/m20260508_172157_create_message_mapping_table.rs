@@ -24,7 +24,7 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(
                             MessageMapping::MessageType)
-                            .uuid()
+                            .string()
                             .not_null()
                     )
 
@@ -33,9 +33,9 @@ impl MigrationTrait for Migration {
                         .uuid()
                         .not_null()
                     )
-                    .col(big_integer(MessageMapping::ScopeId)
+                    .col(ColumnDef::new(MessageMapping::ScopeId)
                         .uuid()
-                        .not_null()
+                        .null()
                     )
 
                     .to_owned(),

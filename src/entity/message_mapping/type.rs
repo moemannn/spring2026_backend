@@ -7,5 +7,8 @@ pub enum Type {
     Channel,
 
     #[sea_orm(string_value = "dm")]
-    DirectMessage,
+    PersonalDirectMessage,
+
+    #[sea_orm(string_value = "group")]
+    GroupDirectMessage,
 }
