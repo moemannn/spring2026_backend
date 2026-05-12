@@ -14,8 +14,8 @@ pub async fn get_messages() -> Json<Vec<MessageResponseMin>> {
 }
 
 pub async fn get_view_messages_by_page(
-    State(state): State<Arc<AppState>>,
-    Path((id, page, page_size)): Path<(Uuid, u64, u64)>
+    State(_state): State<Arc<AppState>>,
+    Path((_id, _page, _page_size)): Path<(Uuid, u64, u64)>
 ) -> Json<()> {
     Json(())
 }
