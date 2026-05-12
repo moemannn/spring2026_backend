@@ -82,7 +82,7 @@ pub async fn create_user(
 )]
 pub async fn update_user_by_id(
     State(state): State<Arc<AppState>>,
-    Path(id): Path<Uuid>,
+    Path(_id): Path<Uuid>,
     Json(payload): Json<UserRequest>,
 ) -> Result<Json<UserResponse>, AppError> {
     let user = user::update_user(&state.db, payload).await?;

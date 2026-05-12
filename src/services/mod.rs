@@ -1,4 +1,3 @@
-use sea_orm::{DbErr, UpdateResult};
 
 pub mod channel;
 pub mod message;

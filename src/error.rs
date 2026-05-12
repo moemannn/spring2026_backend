@@ -1,5 +1,4 @@
 use axum::{http::StatusCode, response::IntoResponse, Json};
-use sea_orm::UpdateResult;
 use serde_json::json;
 
 #[derive(Debug)]

@@ -1,10 +1,10 @@
-use sea_orm::{ColumnTrait, PaginatorTrait, QueryOrder, UpdateResult};
+use sea_orm::{ColumnTrait, PaginatorTrait, QueryOrder};
 use chrono::Utc;
-use sea_orm::{DatabaseConnection, Set, ActiveModelTrait, DbErr, EntityTrait, QueryFilter};
+use sea_orm::{DatabaseConnection, Set, ActiveModelTrait, EntityTrait, QueryFilter};
 use sea_orm::prelude::Expr;
 use uuid::Uuid;
 use crate::entity::users;
-use crate::models::{UserRequest, UserResponse, UserResponseMin};
+use crate::models::{UserRequest, UserResponse};
 use crate::error::AppError;
 use crate::services::helpers::ensure_affected;
 
@@ -34,8 +34,8 @@ pub async fn create_user(
 }
 
 pub async fn update_user(
-    db: &DatabaseConnection,
-    payload: UserRequest,
+    _db: &DatabaseConnection,
+    _payload: UserRequest,
 ) -> Result<UserResponse, AppError> {
     Ok(UserResponse {
         id: Uuid::new_v4(),

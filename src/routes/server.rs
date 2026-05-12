@@ -1,10 +1,6 @@
 use std::sync::Arc;
-use axum::{
-    routing::{get, post, put, delete},
-    Router,
-};
+use axum::Router;
 use crate::AppState;
-use crate::handlers::users::*;
 
 pub fn server_routes() -> Router<Arc<AppState>> {
     Router::new()

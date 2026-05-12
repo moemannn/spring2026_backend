@@ -4,12 +4,11 @@ use crate::entity::{messages, message_mapping};
 use sea_orm::{Set, ActiveModelTrait};
 use crate::AppState;
 use uuid::Uuid;
-use crate::models::UserResponse;
 
 pub async fn debug(
     State(state): State<Arc<AppState>>,
 ) -> Result<(), String> {
-    let now = chrono::Utc::now();
+    let _now = chrono::Utc::now();
     let db = &state.db;
 
     let mapping = message_mapping::ActiveModel {

@@ -1,6 +1,6 @@
 use std::sync::Arc;
 use axum::{
-    routing::{get, post, put, delete},
+    routing::get,
     Router,
 };
 use crate::AppState;
