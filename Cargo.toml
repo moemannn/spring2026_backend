@@ -1,17 +1,10 @@
 [package]
-name = "axum_seaorm_postgres"
+name = "spring2026"
 version = "0.1.0"
 edition = "2021"
 
-[features]
-default = []
-seed = []
-
 [workspace]
-members = [
-    ".",
-    "migration"
-]
+members = [".", "migration", "seeder", "seeder"]
 
 [dependencies]
 axum = "0.7"

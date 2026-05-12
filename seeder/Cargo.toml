@@ -1,0 +1,17 @@
+[package]
+name = "seeder"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[lib]
+name = "migration"
+path = "src/lib.rs"
+
+[dependencies]
+spring2026 = { path = ".." }
+
+tokio = { version = "1", features = ["full"] }
+sea-orm = "1"
+uuid = { version = "1", features = ["v4"] }
+fake = "5.1.0"
