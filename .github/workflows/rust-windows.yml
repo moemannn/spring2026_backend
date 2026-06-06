@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Ensure Rust is installed
-        shell: pwsh
+        shell: powershell
         run: |
           if (!(Get-Command rustc -ErrorAction SilentlyContinue)) {
             Write-Host "Installing Rust..."
@@ -29,7 +29,7 @@ jobs:
           }
 
       - name: Install components (rustfmt + clippy)
-        shell: pwsh
+        shell: powershell
         run: |
           rustup component add rustfmt
           rustup component add clippy
@@ -44,19 +44,19 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Format check
-        shell: pwsh
+        shell: powershell
         run: cargo fmt -- --check
 
       - name: Clippy (lint)
-        shell: pwsh
+        shell: powershell
         run: cargo clippy --all-targets --all-features -- -D warnings
 
       - name: Build
-        shell: pwsh
+        shell: powershell
         run: cargo build --verbose
 
       - name: Test
-        shell: pwsh
+        shell: powershell
         run: cargo test --verbose
 
 
@@ -70,12 +70,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build release
-        shell: pwsh
+        shell: powershell
         run: cargo build --release
 
       - name: Get binary name
         id: bin
-        shell: pwsh
+        shell: powershell
         run: |
           $name = (Get-Content Cargo.toml | Select-String 'name =').ToString().Split('"')[1]
           echo "name=$name.exe" >> $env:GITHUB_OUTPUT
