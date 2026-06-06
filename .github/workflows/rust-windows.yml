@@ -11,10 +11,6 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
-defaults:
-  run:
-    shell: powershell
-
 jobs:
   ci:
     runs-on: self-hosted
@@ -38,15 +34,19 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Format check
+        shell: pwsh
         run: cargo fmt -- --check
 
       - name: Clippy (lint)
+        shell: pwsh
         run: cargo clippy --all-targets --all-features -- -D warnings
 
       - name: Build
+        shell: pwsh
         run: cargo build --verbose
 
       - name: Test
+        shell: pwsh
         run: cargo test --verbose
 
 
@@ -60,10 +60,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build release
+        shell: pwsh
         run: cargo build --release
 
       - name: Get binary name
         id: bin
+        shell: pwsh
         run: |
           $name = (Get-Content Cargo.toml | Select-String 'name =').ToString().Split('"')[1]
           echo "name=$name.exe" >> $env:GITHUB_OUTPUT
