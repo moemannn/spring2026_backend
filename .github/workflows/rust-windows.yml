@@ -19,17 +19,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt, clippy
+      - name: Ensure Rust is installed
+        shell: pwsh
+        run: |
+          if (!(Get-Command rustc -ErrorAction SilentlyContinue)) {
+            Write-Host "Installing Rust..."
+            Invoke-WebRequest https://win.rustup.rs/x86_64 -OutFile rustup-init.exe
+            Start-Process .\rustup-init.exe -ArgumentList "-y" -Wait
+          }
+
+      - name: Install components (rustfmt + clippy)
+        shell: pwsh
+        run: |
+          rustup component add rustfmt
+          rustup component add clippy
 
       - name: Cache cargo registry + build
         uses: actions/cache@v4
         with:
           path: |
-            C:\Users\${{ env.USERNAME }}\.cargo\registry
-            C:\Users\${{ env.USERNAME }}\.cargo\git
+            C:\Users\${{ github.actor }}\.cargo\registry
+            C:\Users\${{ github.actor }}\.cargo\git
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
