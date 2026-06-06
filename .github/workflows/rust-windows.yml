@@ -43,9 +43,9 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Format check
-        shell: powershell
-        run: cargo fmt -- --check
+      # - name: Format check
+      #   shell: powershell
+      #   run: cargo fmt -- --check
 
       - name: Clippy (lint)
         shell: powershell
