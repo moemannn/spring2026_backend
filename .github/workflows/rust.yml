@@ -1,43 +1,22 @@
-name: Rust CI/CD (WSL)
+name: Rust CI/CD Self - windows
 
 on:
   push:
     branches: ["main"]
+    tags:
+      - "v*"
   pull_request:
     branches: ["main"]
 
+env:
+  CARGO_TERM_COLOR: always
+
+defaults:
+  run:
+    shell: powershell
+
 jobs:
   ci:
-    runs-on: self-hosted
-
-    defaults:
-      run:
-        shell: wsl-bash {0}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Check WSL environment
-        run: |
-          uname -a
-          cat /etc/os-release
-
-      - name: Install Rust (if needed)
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          source $HOME/.cargo/env
-
-      - name: Build
-        run: cargo build --verbose
-
-      - name: Test
-        run: cargo test --verbose
-
-  release:
-    name: Build Release (tags only)
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: ci
     runs-on: self-hosted
 
     steps:
@@ -46,12 +25,51 @@ jobs:
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
 
-      - name: Build release binary
+      - name: Cache cargo registry + build
+        uses: actions/cache@v4
+        with:
+          path: |
+            C:\Users\${{ env.USERNAME }}\.cargo\registry
+            C:\Users\${{ env.USERNAME }}\.cargo\git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Format check
+        run: cargo fmt -- --check
+
+      - name: Clippy (lint)
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Build
+        run: cargo build --verbose
+
+      - name: Test
+        run: cargo test --verbose
+
+
+  release:
+    runs-on: self-hosted
+    needs: ci
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build release
         run: cargo build --release
 
-      - name: Upload release artifact
+      - name: Get binary name
+        id: bin
+        run: |
+          $name = (Get-Content Cargo.toml | Select-String 'name =').ToString().Split('"')[1]
+          echo "name=$name.exe" >> $env:GITHUB_OUTPUT
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: rust-binary
-          path: target/release/<your-binary-name>
+          path: target/release/${{ steps.bin.outputs.name }}
